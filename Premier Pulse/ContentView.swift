@@ -5,13 +5,26 @@
 //  Created by Ahmed Juvale on 11/18/24.
 //
 import SwiftUI
+import UserNotifications
 
 struct ContentView: View {
     @State private var query: String = ""
     @State private var results: [Movie] = []
-    @State private var popularMovies: [Movie] = []
+    @State private var upcomingMovies: [Movie] = []
     @State private var favorites: [Movie] = []
     @State private var showingFavorites = false  // State to control the favorites sheet
+
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permissions: \(error.localizedDescription)")
+            } else if granted {
+                print("Notification permissions granted!")
+            } else {
+                print("Notification permissions denied.")
+            }
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -23,22 +36,22 @@ struct ContentView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
 
-                // Conditionally display results or popular movies
+                // Conditionally display results or upcoming movies
                 if query.isEmpty {
                     VStack(alignment: .leading) {
-                        Text("Popular Movies")
+                        Text("Upcoming Movies")
                             .font(.headline)
                             .padding(.horizontal)
 
-                        List(popularMovies, id: \.id) { movie in
-                            MovieRow(movie: movie, favorites: $favorites)
+                        List(upcomingMovies, id: \.id) { movie in
+                            MovieRow(movie: movie, favorites: $favorites, addToFavorites: addToFavorites)
                         }
                         .listStyle(PlainListStyle())
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity) // Fullscreen layout
                 } else {
                     List(results, id: \.id) { movie in
-                        MovieRow(movie: movie, favorites: $favorites)
+                        MovieRow(movie: movie, favorites: $favorites, addToFavorites: addToFavorites)
                     }
                 }
 
@@ -63,7 +76,7 @@ struct ContentView: View {
             }
             .navigationTitle("Movie Search")
             .onAppear {
-                fetchPopularMovies()
+                fetchUpcomingMovies()
             }
         }
     }
@@ -95,20 +108,45 @@ struct ContentView: View {
         task.resume()
     }
 
-    // Function to fetch popular movies from the API
-    func fetchPopularMovies() {
-        guard let apiKey = getAPIKey(),
-              let url = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)") else {
+    // Function to fetch upcoming movies from the API
+    func fetchUpcomingMovies() {
+        guard let apiKey = getAPIKey() else {
             print("Invalid API key")
             return
         }
 
+        // Format dates for the API query
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let currentDate = Date()
+        let minDate = dateFormatter.string(from: currentDate)
+        let maxDate = dateFormatter.string(from: Calendar.current.date(byAdding: .month, value: 1, to: currentDate) ?? currentDate)
+
+        // Construct the discover API URL
+        guard let url = URL(string: "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_release_type=2&release_date.gte=\(minDate)&release_date.lte=\(maxDate)&api_key=\(apiKey)") else {
+            print("Invalid URL")
+            return
+        }
+
+        print("Requesting URL: \(url.absoluteString)") // Log the full URL for debugging
+
+        // Perform the network request
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
                 do {
                     let decodedResponse = try JSONDecoder().decode(MovieResponse.self, from: data)
+
+                    // Filter the movies explicitly to ensure they have release dates in the future
+                    let filteredMovies = decodedResponse.results.filter { movie in
+                        guard let releaseDateString = movie.releaseDate,
+                              let releaseDate = dateFormatter.date(from: releaseDateString) else {
+                            return false // Exclude movies with invalid or missing release dates
+                        }
+                        return releaseDate >= currentDate // Include movies with future release dates
+                    }
+
                     DispatchQueue.main.async {
-                        popularMovies = decodedResponse.results
+                        upcomingMovies = filteredMovies
                     }
                 } catch {
                     print("Failed to decode response: \(error.localizedDescription)")
@@ -119,6 +157,56 @@ struct ContentView: View {
         }
 
         task.resume()
+    }
+
+    
+    func scheduleNotification(for movie: Movie) {
+        guard let releaseDateString = movie.releaseDate,
+              let releaseDate = ISO8601DateFormatter().date(from: releaseDateString) else {
+            print("Invalid release date for movie: \(movie.title)")
+            return
+        }
+
+        // Calculate the date two weeks before release
+        let twoWeeksBefore = Calendar.current.date(byAdding: .day, value: -14, to: releaseDate)
+
+        // If the movie is already less than two weeks away
+        let currentDate = Date()
+        let notificationDate: Date
+        if let twoWeeksBefore = twoWeeksBefore, twoWeeksBefore > currentDate {
+            notificationDate = twoWeeksBefore
+        } else {
+            // Schedule the notification for the next moment possible
+            notificationDate = currentDate.addingTimeInterval(5) // 10 seconds from now
+        }
+
+        // Create notification content
+        let content = UNMutableNotificationContent()
+        content.title = "Upcoming Movie Release"
+        content.body = "The movie \"\(movie.title)\" releases on \(releaseDateString). Get ready!"
+        content.sound = .default
+
+        // Schedule the notification
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notificationDate),
+            repeats: false
+        )
+        let request = UNNotificationRequest(identifier: "\(movie.id)", content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Failed to schedule notification: \(error.localizedDescription)")
+            } else {
+                print("Notification scheduled for \(movie.title) on \(notificationDate).")
+            }
+        }
+    }
+    
+    func addToFavorites(movie: Movie) {
+        if !favorites.contains(where: { $0.id == movie.id }) {
+            favorites.append(movie)
+            scheduleNotification(for: movie) // Schedule a notification
+        }
     }
 
     // Function to get the API key from the Secrets.plist
@@ -137,6 +225,7 @@ struct MovieRow: View {
     let movie: Movie
     @Binding var favorites: [Movie]
     @State private var isAnimating = false
+    var addToFavorites: (Movie) -> Void // Add closure as a parameter
 
     var body: some View {
         HStack(alignment: .top) {
@@ -177,7 +266,7 @@ struct MovieRow: View {
                     if favorites.contains(where: { $0.id == movie.id }) {
                         favorites.removeAll { $0.id == movie.id }
                     } else {
-                        favorites.append(movie)
+                        addToFavorites(movie) // Call the closure passed from ContentView
                     }
                 }
                 // Reset animation state after a short delay
@@ -200,12 +289,35 @@ struct FavoritesView: View {
     var body: some View {
         NavigationView {
             List(favorites, id: \.id) { movie in
-                Text(movie.title)
+                HStack(alignment: .top) {
+                    if let posterPath = movie.posterPath {
+                        AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w200\(posterPath)")) { image in
+                            image.resizable()
+                                .frame(width: 50, height: 75)
+                                .cornerRadius(8)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(movie.title)
+                            .font(.headline)
+
+                        if let releaseDate = movie.releaseDate {
+                            Text("Release Date: \(releaseDate)")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+                .padding(.vertical, 5)
             }
             .navigationTitle("Favorites")
         }
     }
 }
+
 
 
 
