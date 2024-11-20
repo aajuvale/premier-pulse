@@ -29,9 +29,33 @@
 		2C91D0842CEBE871001C2CA1 /* Premier PulseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Premier PulseUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2C91D0BB2CEE6763001C2CA1 /* Exceptions for "Premier Pulse" folder in "Premier Pulse" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Secrets.plist,
+			);
+			target = 2C91D0692CEBE870001C2CA1 /* Premier Pulse */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		2C91D0BC2CEE6763001C2CA1 /* Exceptions for "Premier Pulse" folder in "Compile Sources" phase from "Premier Pulse" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 2C91D0662CEBE870001C2CA1 /* Sources */;
+			membershipExceptions = (
+				Secrets.plist,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2C91D06C2CEBE870001C2CA1 /* Premier Pulse */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2C91D0BB2CEE6763001C2CA1 /* Exceptions for "Premier Pulse" folder in "Premier Pulse" target */,
+				2C91D0BC2CEE6763001C2CA1 /* Exceptions for "Premier Pulse" folder in "Compile Sources" phase from "Premier Pulse" target */,
+			);
 			path = "Premier Pulse";
 			sourceTree = "<group>";
 		};
