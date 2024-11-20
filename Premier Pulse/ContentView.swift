@@ -44,14 +44,36 @@ struct ContentView: View {
                             .padding(.horizontal)
 
                         List(upcomingMovies, id: \.id) { movie in
-                            MovieRow(movie: movie, favorites: $favorites, addToFavorites: addToFavorites)
+                            MovieRow(
+                                movie: movie,
+                                favorites: $favorites,
+                                addToFavorites: addToFavorites,
+                                showRating: false // Hide rating for upcoming movies
+                            )
                         }
                         .listStyle(PlainListStyle())
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity) // Fullscreen layout
                 } else {
                     List(results, id: \.id) { movie in
-                        MovieRow(movie: movie, favorites: $favorites, addToFavorites: addToFavorites)
+                        // Wrap logic inside a closure and compute `showRating` dynamically
+                        let showRating: Bool = {
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd"
+                            let currentDate = Date()
+                            if let releaseDate = dateFormatter.date(from: movie.releaseDate ?? "") {
+                                return releaseDate <= currentDate // Show rating if the release date is in the past or today
+                            }
+                            return false // Default to false if release date is invalid
+                        }()
+
+                        // Return the MovieRow with the computed `showRating`
+                        MovieRow(
+                            movie: movie,
+                            favorites: $favorites,
+                            addToFavorites: addToFavorites,
+                            showRating: showRating
+                        )
                     }
                 }
 
@@ -224,8 +246,9 @@ struct ContentView: View {
 struct MovieRow: View {
     let movie: Movie
     @Binding var favorites: [Movie]
+    var addToFavorites: (Movie) -> Void
+    var showRating: Bool // New parameter to toggle the rating display
     @State private var isAnimating = false
-    var addToFavorites: (Movie) -> Void // Add closure as a parameter
 
     var body: some View {
         HStack(alignment: .top) {
@@ -249,8 +272,11 @@ struct MovieRow: View {
                         .foregroundColor(.gray)
                 }
 
-                Text("Rating: \(String(format: "%.1f", movie.voteAverage))/10")
-                    .font(.subheadline)
+                // Conditionally show the rating
+                if showRating {
+                    Text("Rating: \(String(format: "%.1f", movie.voteAverage))/10")
+                        .font(.subheadline)
+                }
 
                 Text(movie.overview)
                     .font(.caption)
@@ -266,7 +292,7 @@ struct MovieRow: View {
                     if favorites.contains(where: { $0.id == movie.id }) {
                         favorites.removeAll { $0.id == movie.id }
                     } else {
-                        addToFavorites(movie) // Call the closure passed from ContentView
+                        addToFavorites(movie)
                     }
                 }
                 // Reset animation state after a short delay
@@ -281,6 +307,7 @@ struct MovieRow: View {
         }
     }
 }
+
 
 
 struct FavoritesView: View {
