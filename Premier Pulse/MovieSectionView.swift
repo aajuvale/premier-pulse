@@ -13,6 +13,7 @@ struct MovieSection: View {
     let movies: [Movie]
     @Binding var favorites: [Movie]
     var addToFavorites: (Movie) -> Void
+//    var toggleFavorites: (Movie) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -23,7 +24,7 @@ struct MovieSection: View {
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack {
                     ForEach(movies, id: \.id) { movie in
-                        NavigationLink(destination: MovieDetailView(movie: movie)) {
+                        NavigationLink(destination: MovieDetailView(movie: movie, favorites: $favorites, toggleFavorites: addToFavorites)) {
                             MovieCard(movie: movie, favorites: $favorites, addToFavorites: addToFavorites)
                         }
                         .padding(.horizontal)
