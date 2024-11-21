@@ -30,7 +30,7 @@ struct MovieCard: View {
                 Text(movie.title)
                     .font(.headline)
 
-                if let releaseDate = movie.releaseDate {
+                if let releaseDate = movie.formattedReleaseDate {
                     Text("Release Date: \(releaseDate)")
                         .font(.subheadline)
                         .foregroundColor(.gray)

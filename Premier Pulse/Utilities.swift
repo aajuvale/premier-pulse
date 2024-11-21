@@ -20,7 +20,7 @@ class Utilities {
     }
 
     static func scheduleNotification(for movie: Movie) {
-            guard let releaseDateString = movie.releaseDate,
+            guard let releaseDateString = movie.formattedReleaseDate,
                   let releaseDate = ISO8601DateFormatter().date(from: releaseDateString) else {
                 print("Invalid release date for movie: \(movie.title)")
                 return

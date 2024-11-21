@@ -58,7 +58,7 @@ struct MovieDetailView: View {
 //                    .font(.largeTitle)
 //                    .multilineTextAlignment(.center)
 
-                if let releaseDate = movie.releaseDate {
+                if let releaseDate = movie.formattedReleaseDate {
                     Text("Release Date: \(releaseDate)")
                         .font(.headline)
                         .foregroundColor(.gray)
