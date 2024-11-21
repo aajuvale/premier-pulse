@@ -20,11 +20,14 @@ class Utilities {
     }
 
     static func scheduleNotification(for movie: Movie) {
-            guard let releaseDateString = movie.formattedReleaseDate,
+        print(movie.releaseDate) // Output for mufasa Optional("2024-12-18")
+        guard let releaseDateString = movie.releaseDate,
                   let releaseDate = ISO8601DateFormatter().date(from: releaseDateString) else {
+               
                 print("Invalid release date for movie: \(movie.title)")
                 return
             }
+            
 
             // Calculate the date two weeks before release
             let twoWeeksBefore = Calendar.current.date(byAdding: .day, value: -14, to: releaseDate)
@@ -60,4 +63,5 @@ class Utilities {
                 }
             }
         }
+    
 }
