@@ -20,15 +20,17 @@ struct MovieDetailView: View {
                         switch phase {
                         case .empty:
                             ProgressView()
-                                .frame(width: 300, height: 450) // 2 * 3 aspect ratio
+                                .frame(width: 375, height: 565) // 2 * 3 aspect ratio
+                                .cornerRadius(10)
                         case .success(let image):
                             image.resizable()
-                                .frame(width: 300, height: 450)
+                                .frame(width: 375, height: 565)
                                 .cornerRadius(10)
                         case .failure:
                             Image(systemName: "photo")
                                 .resizable()
-                                .frame(width: 300, height: 450)
+                                .frame(width: 375, height: 565)
+                                .cornerRadius(10)
                                 .foregroundColor(.gray)
                         @unknown default:
                             EmptyView()
@@ -46,25 +48,33 @@ struct MovieDetailView: View {
                         Text(favorites.contains(where: { $0.id == movie.id }) ? "Remove from Favorites" : "Add to Favorites")
                     }
                     .padding()
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: 300)
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 }
 
-                Text(movie.title)
-                    .font(.largeTitle)
-                    .multilineTextAlignment(.center)
+//                Text(movie.title)
+//                    .font(.largeTitle)
+//                    .multilineTextAlignment(.center)
 
                 if let releaseDate = movie.releaseDate {
                     Text("Release Date: \(releaseDate)")
                         .font(.headline)
                         .foregroundColor(.gray)
                 }
-
+                
+//                Text("Synopsis")
+//                    .font(.title2)
+//                    .bold()
+//                    .frame(maxWidth: .infinity)
+                
+                Divider()
+                
                 Text(movie.overview)
                     .font(.body)
                     .padding(.horizontal)
+                    .multilineTextAlignment(.center)
 
                
             }
