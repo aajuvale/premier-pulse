@@ -18,15 +18,15 @@ struct MovieDetailView: View {
                         switch phase {
                         case .empty:
                             ProgressView() // Show a loading indicator while the image loads
-                                .frame(height: 300)
+                                .frame(width: 300, height: 450) // 2 * 3 aspect ratio for posters should divide to 0.667
                         case .success(let image):
                             image.resizable()
-                                .frame(height: 300)
+                                .frame(width: 300, height: 450)
                                 .cornerRadius(10)
                         case .failure:
                             Image(systemName: "photo") // Show a placeholder image on failure
                                 .resizable()
-                                .frame(height: 300)
+                                .frame(width: 300, height: 450)
                                 .foregroundColor(.gray)
                         @unknown default:
                             EmptyView()
