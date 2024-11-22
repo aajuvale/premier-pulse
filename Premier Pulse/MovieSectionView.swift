@@ -29,7 +29,7 @@ struct MovieSection: View {
                             MovieCard(movie: movie, favorites: $favorites, addToFavorites: addToFavorites)
                         }
                         .padding(.horizontal)
-                        .padding(.vertical, 5)
+                        .padding(.vertical, 2.5)
                     }
                 }
             }

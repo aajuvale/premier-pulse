@@ -25,8 +25,7 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.all)
 
                 VStack(spacing: 10) {
-                    // Search bar
-                    SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
+                   
 
                     // Dynamic sections
                     if query.isEmpty {
@@ -45,7 +44,9 @@ struct ContentView: View {
                         )
                     }
 
-                    Spacer()
+//                    Spacer()
+                    // Search bar
+                    SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
 
                     // Favorites button
                     FavoritesButton(favoritesCount: favorites.count) {
@@ -56,7 +57,15 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("Premier Pulse")
+            .navigationBarTitleDisplayMode(.inline) // Optional: Controls the title style
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("PREMIER PULSE")
+                        .font(.custom("Optima-Bold", size: 35)) // Apply custom font
+                        .foregroundColor(.blue) // Optional: Change text color
+                        .padding(.bottom, 10)
+                }
+            }
             .onAppear { fetchUpcomingMovies() }
         }
     }
