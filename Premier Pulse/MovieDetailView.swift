@@ -102,7 +102,7 @@ struct MovieDetailView: View {
                             HStack {
                                 Image(systemName: favorites.contains(where: { $0.id == movie.id }) ? "star.fill" : "star")
                                     .foregroundColor(favorites.contains(where: { $0.id == movie.id }) ? .yellow : .gray)
-                                Text(favorites.contains(where: { $0.id == movie.id }) ? "Untrack" : "Track Release!")
+                                Text(favorites.contains(where: { $0.id == movie.id }) ? "Remove Alerts" : "Get Alerts!")
                                     .font(.body)
                                     .fontWeight(.bold)
                             }
