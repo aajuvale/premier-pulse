@@ -42,7 +42,7 @@ struct MovieCard: View {
             }
 
             Spacer()
-
+            
             Button(action: { addToFavorites(movie) }) {
                 Image(systemName: favorites.contains(where: { $0.id == movie.id }) ? "star.fill" : "star")
                     .foregroundColor(.yellow)

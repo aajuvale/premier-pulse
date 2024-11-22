@@ -18,7 +18,8 @@ struct MovieSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .font(.headline)
+                .font(.title2)
+                .bold(true)
                 .padding(.horizontal)
 
             ScrollView(.vertical, showsIndicators: false) {
