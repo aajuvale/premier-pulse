@@ -18,11 +18,11 @@ struct MovieCard: View {
             if let posterPath = movie.posterPath {
                 AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w200\(posterPath)")) { image in
                     image.resizable()
-                        .frame(width: 70, height: 100)
+                        .frame(width: 100, height: 150)
                         .cornerRadius(10)
                 } placeholder: {
                     ProgressView()
-                        .frame(width: 70, height: 100)
+                        .frame(width: 100, height: 150)
                 }
             }
 
@@ -38,7 +38,7 @@ struct MovieCard: View {
 
                 Text(movie.overview)
                     .font(.caption)
-                    .lineLimit(3)
+                    .lineLimit(5)
             }
 
             Spacer()
