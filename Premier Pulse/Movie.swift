@@ -4,6 +4,7 @@
 //
 //  Created by Ahmed Juvale on 11/20/24.
 //
+
 import Foundation
 
 struct Movie: Codable {

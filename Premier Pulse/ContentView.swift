@@ -71,9 +71,14 @@ struct ContentView: View {
     }
 
     func fetchMovies(query: String) {
-        APIManager.shared.fetchMovies(query: query) { fetchedResults in
+        APIManager.shared.fetchMovies(query: query) { result in
             DispatchQueue.main.async {
-                results = fetchedResults
+                switch result {
+                case .success(let movies):
+                    self.results = movies // Assign the array of movies
+                case .failure(let error):
+                    print("Error fetching movies: \(error.localizedDescription)")
+                }
             }
         }
     }
