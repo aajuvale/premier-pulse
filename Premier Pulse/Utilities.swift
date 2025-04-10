@@ -18,9 +18,17 @@ class Utilities {
             }
             return apiKey
     }
+    
+    static func saveUserIdentifier(_ userIdentifier: String) {
+            UserDefaults.standard.set(userIdentifier, forKey: "appleUserIdentifier")
+        }
+        
+    static func getUserIdentifier() -> String? {
+        return UserDefaults.standard.string(forKey: "appleUserIdentifier")
+    }
 
     static func scheduleNotification(for movie: Movie) {
-        print(movie.releaseDate) // Output for mufasa Optional("2024-12-18")
+        print(movie.releaseDate) // Output for mufasa is Optional("2024-12-18")
         guard let releaseDateString = movie.releaseDate,
                   let releaseDate = ISO8601DateFormatter().date(from: releaseDateString) else {
                
@@ -58,6 +66,7 @@ class Utilities {
             UNUserNotificationCenter.current().add(request) { error in
                 if let error = error {
                     print("Failed to schedule notification: \(error.localizedDescription)")
+                    print("")
                 } else {
                     print("Notification scheduled for \(movie.title) on \(notificationDate).")
                 }

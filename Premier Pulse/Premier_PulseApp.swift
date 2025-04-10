@@ -9,7 +9,12 @@ import SwiftUI
 
 @main
 struct Premier_PulseApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
+        WindowGroup {
+            SplashScreenView()
+        }
         WindowGroup {
             ContentView()
         }
