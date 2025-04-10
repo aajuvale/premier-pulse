@@ -34,9 +34,9 @@ Premier Pulse is an iOS application that allows users to search for upcoming mov
 
 ## 🖼️ Screenshots
 
-| Splash Screen | Upcoming Movies | Search Results |
+| Movie Screen | Upcoming Movies | Search Results |
 |:-------------:|:---------------:|:--------------:|
-| ![Splash](Premier\Pulse/In\App\Images/thunderbolts.png) | ![Upcoming](images/upcoming.png) | ![Search](images/search.png) |
+| ![Movie](Premier%20Pulse/In%20App%20Images/thunderbolts.png) | ![Upcoming](Premier%20Pulse/In%20App%20Images/opening.png) | ![Search](images/search.png) |
 
 | Movie Detail View | Track Button & Logo | Videos & Backdrops |
 |:-----------------:|:-------------------:|:------------------:|
