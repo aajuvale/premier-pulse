@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2CF0C0C32DA863FB009A736D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2CF0C0C22DA863FB009A736D /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2C91D07B2CEBE871001C2CA1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		2C91D06A2CEBE870001C2CA1 /* Premier Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Premier Pulse.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C91D07A2CEBE871001C2CA1 /* Premier PulseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Premier PulseTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C91D0842CEBE871001C2CA1 /* Premier PulseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Premier PulseUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CF0C0C22DA863FB009A736D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -103,6 +108,7 @@
 				2C91D07D2CEBE871001C2CA1 /* Premier PulseTests */,
 				2C91D0872CEBE871001C2CA1 /* Premier PulseUITests */,
 				2C91D06B2CEBE870001C2CA1 /* Products */,
+				2CF0C0C22DA863FB009A736D /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -236,6 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CF0C0C32DA863FB009A736D /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
