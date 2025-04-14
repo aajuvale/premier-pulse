@@ -28,7 +28,7 @@ class Utilities {
     }
 
     static func scheduleNotification(for movie: Movie) {
-        print(movie.releaseDate) // Output for mufasa is Optional("2024-12-18")
+//        print(movie.releaseDate) // Output for mufasa is Optional("2024-12-18")
         if let releaseDateString = movie.releaseDate {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
@@ -43,7 +43,11 @@ class Utilities {
                 let currentDate = Date()
                 let notificationDate: Date
                 if let twoWeeksBefore = twoWeeksBefore, twoWeeksBefore > currentDate {
-                    notificationDate = twoWeeksBefore
+                    if let dateAtElevenAM = Calendar.current.date(bySettingHour: 11, minute: 0, second: 0, of: twoWeeksBefore) {
+                            notificationDate = dateAtElevenAM
+                        } else {
+                            notificationDate = twoWeeksBefore
+                        }
                 } else {
                     // Schedule the notification for the next moment possible
                     notificationDate = currentDate.addingTimeInterval(5) // 10 seconds from now
