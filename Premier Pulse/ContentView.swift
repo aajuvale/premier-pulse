@@ -102,7 +102,7 @@ struct ContentView: View {
             favorites.remove(at: index) // Remove if already in favorites
         } else {
             favorites.append(movie) // Add if not in favorites
-            Utilities.scheduleNotification(for: movie) // Optional: Add notification
+            Utilities.scheduleNotification(for: movie) // Scheduling notifications prior to the movie release
         }
     }
     

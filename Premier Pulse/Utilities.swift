@@ -29,48 +29,53 @@ class Utilities {
 
     static func scheduleNotification(for movie: Movie) {
         print(movie.releaseDate) // Output for mufasa is Optional("2024-12-18")
-        guard let releaseDateString = movie.releaseDate,
-                  let releaseDate = ISO8601DateFormatter().date(from: releaseDateString) else {
-               
-                print("Invalid release date for movie: \(movie.title)")
-                return
-            }
-            
+        if let releaseDateString = movie.releaseDate {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            formatter.locale = Locale(identifier: "en_US_POSIX")
 
-            // Calculate the date two weeks before release
-            let twoWeeksBefore = Calendar.current.date(byAdding: .day, value: -14, to: releaseDate)
+            if let date = formatter.date(from: releaseDateString) {
+                print("Formatted date: \(date)")
+                // Calculate the date two weeks before release
+                let twoWeeksBefore = Calendar.current.date(byAdding: .day, value: -14, to: date)
 
-            // If the movie is already less than two weeks away
-            let currentDate = Date()
-            let notificationDate: Date
-            if let twoWeeksBefore = twoWeeksBefore, twoWeeksBefore > currentDate {
-                notificationDate = twoWeeksBefore
-            } else {
-                // Schedule the notification for the next moment possible
-                notificationDate = currentDate.addingTimeInterval(5) // 10 seconds from now
-            }
-
-            // Create notification content
-            let content = UNMutableNotificationContent()
-            content.title = "Upcoming Movie Release"
-            content.body = "The movie \"\(movie.title)\" releases on \(releaseDateString). Get ready!"
-            content.sound = .default
-
-            // Schedule the notification
-            let trigger = UNCalendarNotificationTrigger(
-                dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notificationDate),
-                repeats: false
-            )
-            let request = UNNotificationRequest(identifier: "\(movie.id)", content: content, trigger: trigger)
-
-            UNUserNotificationCenter.current().add(request) { error in
-                if let error = error {
-                    print("Failed to schedule notification: \(error.localizedDescription)")
-                    print("")
+                // If the movie is already less than two weeks away
+                let currentDate = Date()
+                let notificationDate: Date
+                if let twoWeeksBefore = twoWeeksBefore, twoWeeksBefore > currentDate {
+                    notificationDate = twoWeeksBefore
                 } else {
-                    print("Notification scheduled for \(movie.title) on \(notificationDate).")
+                    // Schedule the notification for the next moment possible
+                    notificationDate = currentDate.addingTimeInterval(5) // 10 seconds from now
                 }
+
+                // Create notification content
+                let content = UNMutableNotificationContent()
+                content.title = "Upcoming Movie Release"
+                content.body = "The movie \"\(movie.title)\" releases on \(releaseDateString). Get ready!"
+                content.sound = .default
+
+                // Schedule the notification
+                let trigger = UNCalendarNotificationTrigger(
+                    dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notificationDate),
+                    repeats: false
+                )
+                let request = UNNotificationRequest(identifier: "\(movie.id)", content: content, trigger: trigger)
+
+                UNUserNotificationCenter.current().add(request) { error in
+                    if let error = error {
+                        print("Failed to schedule notification: \(error.localizedDescription)")
+                        print("")
+                    } else {
+                        print("Notification scheduled for \(movie.title) on \(notificationDate).")
+                    }
+                }
+                }
+            } else {
+                print("Failed to format date")
             }
         }
+            
+
     
 }
