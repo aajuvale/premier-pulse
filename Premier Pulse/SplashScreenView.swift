@@ -21,9 +21,6 @@ struct SplashScreenView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                    Text("hello world!")
-                        .font(.headline)
-                        .foregroundColor(.white)
                 }
             }
             .onAppear {
