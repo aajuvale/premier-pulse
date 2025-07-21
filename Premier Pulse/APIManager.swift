@@ -72,7 +72,7 @@ class APIManager {
             let maxDate = dateFormatter.string(from: Calendar.current.date(byAdding: .month, value: 1, to: currentDate) ?? currentDate)
 
             // Construct the discover API URL
-            guard let url = URL(string: "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_release_type=2&release_date.gte=\(minDate)&release_date.lte=\(maxDate)&api_key=\(apiKey)") else {
+            guard let url = URL(string: "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_release_type=2&release_date.gte=\(minDate)&release_date.lte=\(maxDate)&without_genres=10749&api_key=\(apiKey)") else {
                 print("Invalid URL")
                 completion(.failure(NSError(domain: "APIError", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
                 return
