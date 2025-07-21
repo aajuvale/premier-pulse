@@ -49,9 +49,17 @@ struct MovieDetailView: View {
                                     .frame(width: 375, height: 565)
                                     .cornerRadius(10)
                             case .success(let image):
-                                image.resizable()
-                                    .frame(width: 375, height: 565)
-                                    .cornerRadius(10)
+                                if #available(iOS 26.0, *) {
+                                    image.resizable()
+                                        .frame(width: 375, height: 565)
+                                        .glassEffect(in: .rect)
+                                        .cornerRadius(10)
+                                } else {
+                                    // Fallback on earlier versions
+                                    image.resizable()
+                                        .frame(width: 375, height: 565)
+                                        .cornerRadius(10)
+                                }
                             case .failure:
                                 Image(systemName: "photo")
                                     .resizable()
