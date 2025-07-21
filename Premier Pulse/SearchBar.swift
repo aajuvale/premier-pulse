@@ -13,16 +13,31 @@ struct SearchBar: View {
     var onCommit: () -> Void
 
     var body: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
-            TextField("Search for a movie...", text: $query, onCommit: onCommit)
-                .textFieldStyle(PlainTextFieldStyle())
+        if #available(iOS 26.0, *) {
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(Color.secondary)
+                TextField("Search for a movie...", text: $query, onCommit: onCommit)
+                    .textFieldStyle(PlainTextFieldStyle())
+            }
+            .foregroundStyle(Color.primary)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .glassEffect()
+            .shadow(radius: 5)
+        } else {
+            // Fallback on earlier versions
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search for a movie...", text: $query, onCommit: onCommit)
+                    .textFieldStyle(PlainTextFieldStyle())
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(12)
+            .shadow(radius: 5)
+            .padding(.horizontal)
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 5)
-        .padding(.horizontal)
     }
 }

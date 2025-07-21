@@ -47,6 +47,7 @@ struct ContentView: View {
 //                    Spacer()
                     // Search bar
                     SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
+                        .padding(.horizontal)
 
                     // Favorites button
                     FavoritesButton(favoritesCount: favorites.count) {
