@@ -46,8 +46,12 @@ struct ContentView: View {
 
 //                    Spacer()
                     // Search bar
-                    SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
-                        .padding(.horizontal)
+                    if #available(iOS 26.0, *) {
+                        SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
+                            .padding(.horizontal)
+                    } else {
+                        SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
+                    }
 
                     // Favorites button
                     FavoritesButton(favoritesCount: favorites.count) {

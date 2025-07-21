@@ -10,6 +10,8 @@ import SwiftUI
 
 struct SearchBar: View {
     @Binding var query: String
+    @Environment(\.colorScheme) var colorScheme
+    
     var onCommit: () -> Void
 
     var body: some View {
@@ -34,7 +36,7 @@ struct SearchBar: View {
                     .textFieldStyle(PlainTextFieldStyle())
             }
             .padding()
-            .background(Color.white)
+            .background(colorScheme == .dark ? Color.black.opacity(0.5) : Color.secondary)
             .cornerRadius(12)
             .shadow(radius: 5)
             .padding(.horizontal)
