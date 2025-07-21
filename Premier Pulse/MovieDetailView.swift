@@ -107,17 +107,43 @@ struct MovieDetailView: View {
                         Button(action: {
                             toggleFavorites(movie)
                         }) {
-                            HStack {
-                                Image(systemName: favorites.contains(where: { $0.id == movie.id }) ? "star.fill" : "star")
+                            if #available(iOS 26.0, *) {
+                                HStack {
+                                    Image(
+                                        systemName: favorites
+                                            .contains(where: { $0.id == movie.id }) ? "star.fill" : "star"
+                                    )
                                     .foregroundColor(favorites.contains(where: { $0.id == movie.id }) ? .yellow : .gray)
-                                Text(favorites.contains(where: { $0.id == movie.id }) ? "Remove Alerts" : "Get Alerts!")
+                                    Text(
+                                        favorites
+                                            .contains(where: { $0.id == movie.id }) ? "Remove Alerts" : "Get Alerts!"
+                                    )
                                     .font(.body)
                                     .fontWeight(.bold)
+                                }
+                                .padding()
+                                .foregroundColor(.white)
+                                .glassEffect(.regular.tint(.blue.opacity(0.8)).interactive(), in: .capsule)
+                            } else {
+                                // Fallback on earlier versions
+                                HStack {
+                                    Image(
+                                        systemName: favorites
+                                            .contains(where: { $0.id == movie.id }) ? "star.fill" : "star"
+                                    )
+                                    .foregroundColor(favorites.contains(where: { $0.id == movie.id }) ? .yellow : .gray)
+                                    Text(
+                                        favorites
+                                            .contains(where: { $0.id == movie.id }) ? "Remove Alerts" : "Get Alerts!"
+                                    )
+                                    .font(.body)
+                                    .fontWeight(.bold)
+                                }
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
                         }
                         .padding(.trailing, 16)
                     }
