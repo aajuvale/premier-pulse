@@ -9,6 +9,10 @@
 import SwiftUI
 
 struct MovieCard: View {
+
+    @Environment(\.colorScheme)
+    var colorScheme
+
     let movie: Movie
     @Binding var favorites: [Movie]
     var addToFavorites: (Movie) -> Void
@@ -57,7 +61,7 @@ struct MovieCard: View {
             }
         }
         .padding()
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color.black : Color.white)
         .cornerRadius(10)
         .shadow(radius: 5)
     }
