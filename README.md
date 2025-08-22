@@ -2,6 +2,8 @@
 
 Premier Pulse is an iOS application that allows users to search for upcoming movies and TV shows, track their favorites, and receive reminders before new releases. It’s built entirely in Swift using SwiftUI and integrates directly with [The Movie Database (TMDB)](https://www.themoviedb.org/) API.
 
+Premier Pulse supports Liquid Glass on devices running iOS 26.0+!
+
 ---
 
 ## 📱 Features
