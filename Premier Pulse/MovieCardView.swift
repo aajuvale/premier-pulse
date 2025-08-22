@@ -21,17 +21,9 @@ struct MovieCard: View {
         HStack(alignment: .top) {
             if let posterPath = movie.posterPath {
                 AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w200\(posterPath)")) { image in
-                    if #available(iOS 26.0, *) {
-                        image.resizable()
-                            .frame(width: 100, height: 150)
-                            .glassEffect(in: .rect)
-                            .cornerRadius(10)
-                    } else {
-                        // Fallback on earlier versions
-                        image.resizable()
-                            .frame(width: 100, height: 150)
-                            .cornerRadius(10)
-                    }
+                    image.resizable()
+                        .frame(width: 100, height: 150)
+                        .cornerRadius(10)
                 } placeholder: {
                     ProgressView()
                         .frame(width: 100, height: 150)

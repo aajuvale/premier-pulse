@@ -24,8 +24,8 @@ struct ContentView: View {
                 )
                 .edgesIgnoringSafeArea(.all)
 
-                VStack(spacing: 10) {
-                   
+                ZStack(alignment: .bottom) {
+
 
                     // Dynamic sections
                     if query.isEmpty {
@@ -44,30 +44,37 @@ struct ContentView: View {
                         )
                     }
 
-//                    Spacer()
-                    // Search bar
-                    if #available(iOS 26.0, *) {
-                        SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
-                            .padding(.horizontal)
-                    } else {
-                        SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
-                    }
+                    VStack(spacing: 10) {
+                        // Search bar
+                        if #available(iOS 26.0, *) {
+                            SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
+                                .padding(.horizontal)
+                        } else {
+                            SearchBar(query: $query, onCommit: { fetchMovies(query: query) })
+                        }
 
-                    // Favorites button
-                    FavoritesButton(favoritesCount: favorites.count) {
-                        showingFavorites.toggle()
-                    }
-                    .sheet(isPresented: $showingFavorites) {
-                        FavoritesView(favorites: $favorites)
+                        // Favorites button
+                        FavoritesButton(favoritesCount: favorites.count) {
+                            showingFavorites.toggle()
+                        }
+                        .background {
+                            Color.black
+                                .opacity(0.75)
+                                .blur(radius: 15, opaque: false)
+                                .ignoresSafeArea()
+                        }
+                        .sheet(isPresented: $showingFavorites) {
+                            FavoritesView(favorites: $favorites)
+                        }
                     }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline) // Optional: Controls the title style
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("PREMIER PULSE")
-                        .font(.custom("Optima-Bold", size: 35)) // Apply custom font
-                        .foregroundColor(.blue) // Optional: Change text color
+                        .font(.custom("Optima-Bold", size: 35))
+                        .foregroundColor(.blue)
                         .padding(.bottom, 10)
                 }
             }
